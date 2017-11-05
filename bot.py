@@ -67,7 +67,7 @@ class User(telepot.helper.ChatHandler):
                 self.session.current_sheet_id = self.sheets[remainder]
                 self.sender.sendMessage("Opened sheet '{}' for writing.".format(remainder))
             except:
-                self.session.current_sheet_id = self.ph.add_sheet(remainder, self.remote_user_id)
+                self.session.current_sheet_id = self.ph.new_sheet(remainder, self.remote_user_id)
                 self.sheets[remainder] = self.session.current_sheet_id
                 self.sender.sendMessage("Created a sheet called '{}' and opened it for writing.".format(remainder))
         elif command == '/close':
