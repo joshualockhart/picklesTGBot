@@ -2,7 +2,6 @@ import requests
 import config
 import json
 
-
 BACKEND_URL = config.PICKLES_BACKEND_URL
 
 class PicklesHandler():
@@ -38,8 +37,8 @@ class PicklesHandler():
     def new_element(self, data, sheet_id):
         try:
             r = requests.post(self.url+'/addelement', json={"data": str(data), "sheet_id": str(sheet_id)})
-            #if r.status_code == 200:
-            #    return json.loads(r.text)['id']
+            if r.status_code == 200:
+                return json.loads(r.text)['id']
         except BaseException as ex:
             raise(ex)
 
@@ -51,3 +50,14 @@ class PicklesHandler():
                 return results
         except BaseException as ex:
             raise(ex)
+
+    def get_data_in_sheet(self, sheet_id):
+        try:
+            r = requests.post(self.url+'/getelementsofsheet', json={"id": str(sheet_id)})
+            if r.status_code == 200:
+                results = json.loads(r.text)
+                return results
+        except BaseException as ex:
+            raise(ex)
+
+   

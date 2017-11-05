@@ -6,6 +6,8 @@ import requests
 from session import Session
 from telepot.loop import MessageLoop
 from telepot.delegate import per_chat_id, create_open, pave_event_space
+from data_handler import Timeline
+from latex import build_pdf
 
 from pickles_handler import PicklesHandler
 
@@ -76,6 +78,25 @@ class User(telepot.helper.ChatHandler):
         elif command == '/delete':
             # delete a sheet
             raise NotImplemented
+        elif command == '/show':
+            if remainder in self.sheets.keys():
+                this_sheet_id = self.sheets[remainder]
+            elif len(remainder) == 0:
+                this_sheet_id = self.session.current_sheet_id
+            else:
+                self.sender.sendMessage("No sheet with that name")
+            
+            elements = self.ph.get_data_in_sheet(this_sheet_id)
+
+            tl = Timeline(elements)
+            output_filename = str(int(random.random()*10**6))+".pdf"
+            pdf = build_pdf(tl._getLatex())
+            pdf.save_to(output_filename)
+#            self.sender.sendDocument(pdf)
+            with open(output_filename,'rb') as f:
+                self.sender.sendDocument(f)
+            
+            
         else:
             # write the message to the currently opened sheet.
             if self.session.current_sheet_id != None:
