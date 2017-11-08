@@ -2,4 +2,4 @@ telepot==12.4
 requests==2.14.2
 tinydb==3.6.0
 pandas==0.20.1
-latex==0.6.4
+python-pdf==0.36

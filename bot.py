@@ -7,7 +7,8 @@ from session import Session
 from telepot.loop import MessageLoop
 from telepot.delegate import per_chat_id, create_open, pave_event_space
 from data_handler import Timeline
-from latex import build_pdf
+
+import pydf
 
 from pickles_handler import PicklesHandler
 
@@ -88,11 +89,13 @@ class User(telepot.helper.ChatHandler):
             
             elements = self.ph.get_data_in_sheet(this_sheet_id)
 
-            tl = Timeline(elements)
+            tl = Timeline("",elements)
             output_filename = str(int(random.random()*10**6))+".pdf"
-            pdf = build_pdf(tl._getLatex())
-            pdf.save_to(output_filename)
-#            self.sender.sendDocument(pdf)
+            
+            pdf = pydf.generate_pdf(tl._getHTML())
+            with open(output_filename, 'wb') as f:
+                f.write(pdf)
+
             with open(output_filename,'rb') as f:
                 self.sender.sendDocument(f)
             
